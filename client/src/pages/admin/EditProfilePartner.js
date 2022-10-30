@@ -11,7 +11,7 @@ const EditProfilePartner = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
-  const [state, dispacth] = useContext(UserContext);
+  const [state, dispatch] = useContext(UserContext);
   const [preview, setPreview] = useState(null);
 
   const [form, setForm] = useState({
@@ -68,6 +68,16 @@ const EditProfilePartner = () => {
 
       const response = await API.patch("/user/update/" + user.id, formData);
       console.log("ini data updated user", response.data);
+
+      const auth = await API.get("/check-auth");
+
+      let payload = auth.data.data;
+      payload.token = localStorage.token;
+
+      dispatch({
+        type: "USER_SUCCESS",
+        payload: payload,
+      });
 
       navigate("/profile-admin");
     } catch (error) {
