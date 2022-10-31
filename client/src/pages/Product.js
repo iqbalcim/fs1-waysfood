@@ -12,7 +12,11 @@ const Product = () => {
   const [state, dispacth] = useContext(UserContext);
 
   const { dataCart, setDataCart } = useContext(CartContext);
+
   const params = useParams();
+
+  const { cartLength, setCartLength } = useContext(CartContext);
+  console.log(cartLength);
 
   let { data: productbyuser } = useQuery("productsbyuserCache", async () => {
     const response = await API.get(
@@ -26,6 +30,18 @@ const Product = () => {
     return response.data.data;
   });
 
+  const addToCartHandler = async (productId, productPrice) => {
+    try {
+      const response = await API.post(`/cart/add/${productId}`, {
+        price: productPrice,
+      });
+      const getCart = await API.get("/carts");
+      setCartLength(getCart.data.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <section className="container px-4 mt-8 xl:px-[197px] xl:mt-14">
       <h1 className="text-3xl font-bold my-6">{user?.fullName}, Menus</h1>
@@ -37,15 +53,16 @@ const Product = () => {
           >
             <img src={item.image} alt="" className="w-full h-48" />
             <h2 className="font-bold text-2xl my-3 lg:m-0 xl:text-lg">
-              {item.name}
+              {item.title}
             </h2>
             <p className="text-red-500 my-3 lg:m-0 text-xl font-light">
-              Rp {item.price}
+              {convertRupiah.convert(item.price)}
             </p>
             <GlobalButton
               title="Add To Cart"
               bg="bg-primary"
               styled="w-full text-black font-bold my-3 lg:m-0 py-[10px]"
+              onClick={() => addToCartHandler(item.id, item.price)}
             />
           </div>
         ))}

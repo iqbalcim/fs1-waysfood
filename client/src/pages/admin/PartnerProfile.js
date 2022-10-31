@@ -56,8 +56,8 @@ const PartnerProfile = () => {
         </div>
         <div className="xl:col-end-7 xl:col-span-2">
           <h1 className="text-3xl font-bold my-6">History Transaction</h1>
-          <div>
-            <div className="shadow-xl border grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
+          <div className="overflow-y-auto h-[300px]">
+            <div className="border-2 grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
               <div>
                 <h4 className="text-sm">Geprek Bensu</h4>
                 <h5 className="text-sm">Saturday, 12 March 2021</h5>
@@ -73,7 +73,7 @@ const PartnerProfile = () => {
                 />
               </div>
             </div>
-            <div className="shadow-xl border grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
+            <div className="border-2 grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
               <div>
                 <h4 className="text-sm">Geprek Bensu</h4>
                 <h5 className="text-sm">Saturday, 12 March 2021</h5>
@@ -89,7 +89,7 @@ const PartnerProfile = () => {
                 />
               </div>
             </div>
-            <div className="shadow-xl border grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
+            <div className="border-2 grid grid-cols-2 p-5 rounded-md gap-2 mb-5">
               <div>
                 <h4 className="text-sm">Geprek Bensu</h4>
                 <h5 className="text-sm">Saturday, 12 March 2021</h5>

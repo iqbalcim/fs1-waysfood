@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   BrandLogo,
   IconUser,
@@ -10,6 +10,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Login, Register } from "../components";
 import { UserContext } from "../context/userContext";
+import { API } from "../config/api";
+import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +20,8 @@ const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [dropdownOpen, setdropdownOpen] = useState(false);
   const [state, dispacth] = useContext(UserContext);
+  const { cartLength, setCartLength } = useContext(CartContext);
+  console.log(cartLength);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -34,6 +38,23 @@ const Navbar = () => {
   const drowDownClick = () => {
     setdropdownOpen((current) => !current);
   };
+
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+    const response = await API.get(`/user/${state.user.id}`);
+    console.log(response);
+    setUser(response.data.data);
+  };
+
+  const getCart = async () => {
+    const response = await API.get(`/carts`);
+    setCartLength(response.data.data.length);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [state]);
 
   return (
     <nav className="bg-primary max-w-full">
@@ -88,10 +109,16 @@ const Navbar = () => {
               <div className="flex items-center">
                 <Link to="/cart-order">
                   <img src={CartIcon} alt="" className="mr-5" />
+                  {cartLength > 0 && (
+                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full absolute top-4 right-36">
+                      {cartLength}
+                    </span>
+                  )}
                 </Link>
                 <img
-                  src={IconUser}
-                  alt=""
+                  src={user?.image}
+                  alt="usericon"
+                  className="w-10 h-10 rounded-full mr-5"
                   onClick={() => {
                     drowDownClick();
                     console.log("clicked");
@@ -121,8 +148,9 @@ const Navbar = () => {
             <div className="py-3 ">
               <div className="flex items-center">
                 <img
-                  src={IconUser}
-                  alt=""
+                  src={user?.image}
+                  alt="partnericon"
+                  className="w-10 h-10 rounded-full mr-5"
                   onClick={() => {
                     drowDownClick();
                     console.log("clicked");

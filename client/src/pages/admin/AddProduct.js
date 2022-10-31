@@ -42,7 +42,7 @@ const AddProduct = () => {
         },
       });
 
-      navigate("/product/" + data.data.id);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

@@ -1,33 +1,56 @@
-import { Zayn, BrandLogo } from "../assets";
+import { PartnerProfileImg, BrandLogo } from "../assets";
 import { GlobalButton } from "../components";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { useContext, useEffect, useState } from "react";
+import { API } from "../config/api";
+
 const UserProfile = () => {
   const navigate = useNavigate();
+
+  const [state, dispacth] = useContext(UserContext);
+
+  const handleNavigate = () => {
+    navigate("/edit-admin");
+  };
+
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+    const response = await API.get(`/user/${state.user.id}`);
+    console.log(response);
+    setUser(response.data.data);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [state]);
+
   return (
     <section className="mt-8 px-4 container xl:px-[197px] xl:mt-14">
       <div className="grid xl:grid-cols-2 ">
         <div className="xl:col-start-1 xl:col-end-2 ">
           <h1 className="text-3xl font-bold my-6">My Profile</h1>
           <div className="xl:grid grid-cols-2">
-            <img src={Zayn} alt="" className="w-full" />
+            <img src={user?.image} alt="" className="w-full" />
             <div className="my-5 lg:my-0 lg:flex flex-col justify-evenly lg:ml-5">
               <div>
                 <h2 className="text-2xl font-bold xl:text-xl">Full Name</h2>
-                <p className="text-xl mb-4">Andi</p>
+                <p className="text-xl mb-4">{user?.fullName}</p>
               </div>
               <div>
                 <h2 className="text-2xl font-bold xl:text-xl">Email</h2>
-                <p className="text-xl mb-4">andigans@gmail.com</p>
+                <p className="text-xl mb-4">{user?.email}</p>
               </div>
               <div>
                 <h2 className="text-2xl font-bold xl:text-xl">Phone</h2>
-                <p className="text-xl">083896833122</p>
+                <p className="text-xl">{user?.phone}</p>
               </div>
             </div>
             <GlobalButton
               title="Edit Profile"
-              styled="w-full py-[14px] xl:py-2 xl:mt-4"
-              onClick={() => navigate("/edit-profile")}
+              styled="w-full py-4 xl:py-2 xl:mt-4"
+              onClick={handleNavigate}
             />
           </div>
         </div>
